@@ -8,9 +8,12 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
-var users = require('./routes/users');
+var user = require('./routes/user');
 var login = require('./routes/login');
+var dictionaries = require('./routes/dictionaries');
+var add = require('./routes/add');
 
+var person = require('./routes/person');
 var top_three = require('./routes/top-three');
 
 var app = express();
@@ -27,11 +30,13 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
-app.use('/users', users);
+app.use('/user', user);
 app.use('/login', login);
+app.use('/dictionaries', dictionaries);
+app.use('/add', add);
 
 app.use('/top_three', top_three );
-
+app.use('/person', person);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
     var err = new Error('Not Found');
@@ -39,13 +44,10 @@ app.use(function (req, res, next) {
     next(err);
 });
 
-// error handler
 app.use(function (err, req, res, next) {
-    // set locals, only providing error in development
     res.locals.message = err.message;
     res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-    // render the error page
     res.status(err.status || 500);
     res.render('error');
 });
