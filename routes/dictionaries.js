@@ -186,7 +186,6 @@ router.get('/policjant', function (req, res) {
 });
 
 
-
 /* OSOBY */
 router.get('/people', function (req, res) {
     const client = new pg.Client(connectionString);
@@ -247,6 +246,38 @@ router.get('/offenses', function (req, res) {
     });
 });
 
+/* WYKROCZENIE */
+router.get('/offense:offenseId', function (req, res) {
+    const client = new pg.Client(connectionString);
+    var offenseId = req.params.offenseId.toString();
+    client.connect(function (err) {
+        if (err) {
+            console.log(err);
+            res.send(JSON.stringify(err));
+            return;
+        }
+
+        client.query('select * from projekt.wykroczenie w join projekt.kara_wykroczenie kw on w.id_kara_wykroczenie =' +
+            ' kw.id_kara_wykroczenie where w.id_wykroczenie=$1;', [offenseId], function (err, result) {
+            if (err) {
+                console.log(err);
+                res.send(JSON.stringify(err));
+                return;
+            }
+
+            console.log(result);
+
+            client.end(function (err) {
+                if (err) {
+                    console.log(err);
+                    res.send(JSON.stringify(err));
+                }
+            });
+            res.send(JSON.stringify(result.rows));
+        });
+    });
+});
+
 /* PRZESTEPSTWA */
 router.get('/crimes', function (req, res) {
     const client = new pg.Client(connectionString);
@@ -277,6 +308,38 @@ router.get('/crimes', function (req, res) {
     });
 });
 
+/* PRZESTEPSTWO */
+router.get('/crime:crimeId', function (req, res) {
+    const client = new pg.Client(connectionString);
+    var crimeId = req.params.crimeId.toString();
+    client.connect(function (err) {
+        if (err) {
+            console.log(err);
+            res.send(JSON.stringify(err));
+            return;
+        }
+
+        client.query('select * from projekt.przestepstwo p join projekt.kara_przestepstwo kp on p.id_kara_przestepstwo =' +
+            ' kp.id_kara_przestepstwo where p.id_przestepstwo=$1;', [crimeId], function (err, result) {
+            if (err) {
+                console.log(err);
+                res.send(JSON.stringify(err));
+                return;
+            }
+
+            console.log(result);
+
+            client.end(function (err) {
+                if (err) {
+                    console.log(err);
+                    res.send(JSON.stringify(err));
+                }
+            });
+            res.send(JSON.stringify(result.rows));
+        });
+    });
+});
+
 /* ID */
 router.get('/id', function (req, res) {
     const client = new pg.Client(connectionString);
@@ -288,6 +351,36 @@ router.get('/id', function (req, res) {
         }
 
         client.query('SELECT * FROM projekt.dane_osobowe;', function (err, result) {
+            if (err) {
+                console.log(err);
+                res.send(JSON.stringify(err));
+                return;
+            }
+
+            console.log(result);
+
+            client.end(function (err) {
+                if (err) {
+                    console.log(err);
+                    res.send(JSON.stringify(err));
+                }
+            });
+            res.send(JSON.stringify(result.rows));
+        });
+    });
+});
+
+/* ZAKLAD KARNY */
+router.get('/zaklad', function (req, res) {
+    const client = new pg.Client(connectionString);
+    client.connect(function (err) {
+        if (err) {
+            console.log(err);
+            res.send(JSON.stringify(err));
+            return;
+        }
+
+        client.query('select * from projekt.rodzaj_zaklad_karny rzk join projekt.zaklad_karny zk on rzk.id_rodzaj_zaklad_karny = zk.id_rodzaj_zaklad_karny;', function (err, result) {
             if (err) {
                 console.log(err);
                 res.send(JSON.stringify(err));
