@@ -16,7 +16,7 @@ router.get('/', function (req, res) {
             return;
         }
 
-        client.query('SELECT * FROM projekt.uzytkownik as u WHERE u.nazwa_uzytkownika=\'' + data.toString() +
+        client.query('SELECT * FROM projekt.uzytkownik as u WHERE u.nazwa_uzytkownika=\'' + data +
             '\' ', function (err, result) {
             if (err) {
                 console.log(err);
